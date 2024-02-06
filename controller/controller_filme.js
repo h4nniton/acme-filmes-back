@@ -7,6 +7,9 @@
  * 
  *****************************************************************************************/
 
+// Import do arquivo DAO para manipular dados dos filmes
+const filmesDAO = require('../modulo/DAO/filme.js');
+
 // função para inserir um novo filme
 const setInserirNovoFilme = async function () {
 
@@ -24,6 +27,22 @@ const setExcluirFilme = async function () {
 
 // função para retornar todos os Filme dos banco de dados
 const getListarFilmes = async function () {
+
+    // Cria o objeto JSON
+    let filmesJSON = {};
+
+    // Chama a função do DAO para retornar os dados do banco
+    let dadosFilmes = filmesDAO.selectAllFilmes();
+
+    // Validação para criar o JSON dos dados
+    if (dadosFilmes) {
+        // Cria o JSON de retorno dos dados
+        filmesJSON.filmes = dadosFilmes;
+        filmesJSON.quantidade = dadosFilmes.length
+        filmesJSON.status_code = 200;
+    } else {
+        return false;
+    }
 
 }
 
