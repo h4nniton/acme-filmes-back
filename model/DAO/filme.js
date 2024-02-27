@@ -70,6 +70,11 @@ const selectByIdFilme = async function (id) {
 
 }
 
+const selectByFilterFilme = async function () {
+
+    let sql = `select * from tbl_filme where id = ${id}`;
+}
+
 
 module.exports = {
     insertFilme,
@@ -78,3 +83,6 @@ module.exports = {
     selectAllFilmes,
     selectByIdFilme
 }
+
+
+

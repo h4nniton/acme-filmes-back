@@ -89,7 +89,10 @@ const getBuscarFilme = async function (id) {
 
 }
 
-const getFiltrarFilme = async function () {}
+const getFiltrarFilme = async function () {
+    
+    let filtroFilme
+}
 
 module.exports = {
     setInserirNovoFilme,
@@ -100,17 +103,3 @@ module.exports = {
     getBuscarFilme,
     getFiltrarFilme
 }
-
-
-you´re insecure
-don´t know what for
-you turn heads when you walk through the do-oor
-don´t need makeup to cover up being the way that you are is eno-ough
-
-everyone else in the room can see it
-everyone else but you
-
-baby you light up my world like nobody else
-the way that you flip your hair gets me overwhelmed
-but when you smile at the ground and its hard to tell 
-you don't kno-oow you don't know you're beautiful
