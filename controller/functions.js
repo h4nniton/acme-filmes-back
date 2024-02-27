@@ -1,6 +1,6 @@
 var acmeFilmes = require('../modulo/filmes.js');
 
-const getListarFilmes = functions(){
+const getListarFilmes = functions({
 
     let filmes = acmeFilmes.filmes.filmes
 
@@ -14,5 +14,5 @@ const getListarFilmes = functions(){
     })
 
     return filmJson
-}
+})
 

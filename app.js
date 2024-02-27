@@ -1,7 +1,7 @@
 /*******************************************************************************************
  * Objetivo: Criar funções
  * Data: 
- * Autor: Emily - peguei do professor Marcel
+ * Autor: Emily - misturado com o do professor
  * Versão: 1.0
 ***********************************************************************************************/
 
@@ -74,6 +74,28 @@ app.get('/v2/acmefilmes/filmes', cors(), async function(request, response, next)
         response.json({message: 'nenhum registro encontrado'})
         response.status(404);
     }
+});
+
+// EndPoint: Retorna o filme filtrando pelo ID
+app.get('/v2/acmefilmes/filme/:id', cors(), async function(request, response, next){
+
+    // Recebe o ID encaminhado na requisição
+    let idFilme = request.params.id;
+
+    let dadosFilme = await controllerFilmes.getBuscarFilme(idFilme);
+
+    response.status(dadosFilme.status_code);
+    response.json(dadosFilme);
+
+});
+
+app.get('/v2/acmefilmes/filme/filtro?nome', cors(), async function(request, response, next){
+
+    let filtroFilme = filtroFilme.getFiltrarFlme;
+
+    response.status(filtroFilme.status_code)
+    response.json(filtroFilme)
+
 })
 
 //Executa a API e faz ela ficar aguardando requisições
