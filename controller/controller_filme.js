@@ -15,7 +15,52 @@ const filmesDAO = require('../model/DAO/filme.js');
 const { itxClientDenyList } = require('@prisma/client/runtime/library.js');
 
 // função para inserir um novo filme
-const setInserirNovoFilme = async function () {
+const setInserirNovoFilme = async function (dadosFilme) {
+
+    let statusValidated = false;
+    let novoFilmeJson = {};
+
+    if (dadosFilme.nome                      == '' || dadosFilme.nome == undefined                 || dadosFilme.nome == null                 || dadosFilme.nome.length > 80                ||
+        dadosFilme.sinopse                   == '' || dadosFilme.sinopse == undefined              || dadosFilme.sinopse == null              || dadosFilme.sinopse.length > 65000          ||
+        dadosFilme.duracao                   == '' || dadosFilme.duracao == undefined              || dadosFilme.duracao == null              || dadosFilme.duracao.length > 8              ||
+        dadosFilme.data_lancamento           == '' || dadosFilme.data_lancamento == undefined      || dadosFilme.data_lancamento == null      || dadosFilme.data_lancamento.length != 10    ||
+        dadosFilme.foto_capa                 == '' || dadosFilme.foto_capa == undefined            || dadosFilme.foto_capa == null            || dadosFilme.foto_capa.length > 200          ||
+        dadosFilme.valor_unitario.length  > 8      || isNaN(dadosFilme.valor_unitario)
+        ){
+            return message.ERROR_REQUIRED_FIELDS;
+        } else {
+
+            if (dadosFilme.data_relancamento != ''             &&
+                dadosFilme.data_relancamento != null           &&
+                dadosFilme.data_relancamento != undefined       )
+            {
+                if (dadosFilme.data_relancamento.length != 10){
+                    return message.ERROR_REQUIRED_FIELDS // 400
+                } else {
+                    statusValidated = true;
+                }
+            } else {
+                    statusValidated = true;
+            }
+
+
+            if (statusValidated){
+                let novoFilme = await filmesDAO.insertFilme(dadosFilme);
+
+                if (novoFilme){
+                    novoFilmeJson.status                 = message.SUCCESS_CREATED_ITEM.status;
+                    novoFilmeJson.status_code            = message.SUCCESS_CREATED_ITEM.status_code;
+                    novoFilmeJson.message                = message.SUCCESS_CREATED_ITEM.message;
+                    novoFilmeJson.filme                  = dadosFilme;
+
+                    return novoFilmeJson; // 201
+                    
+                } else {
+                    return message.ERROR_INTERNAL_SERVER_DB; // 500
+                }
+            }
+
+        }
 
 }
 
