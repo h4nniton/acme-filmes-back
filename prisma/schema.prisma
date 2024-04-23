@@ -1,0 +1,16 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:bcd127@localhost:3306/db_acme_filmes_turma_aa"
+}
+
+model tbl_teste {
+  id Int @id @default(autoincrement())
+  nome String
+}
