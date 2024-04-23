@@ -2,7 +2,7 @@
  * Objetivo: Arquivo responsável por realizar validações, consistencias e regra de negócio
  * para os filmes.
  * Data: 30/01/2024 
- * Autor: Nycolle L.
+ * Autor: Emily Crepaldi
  * Versão: 1.0
  *********************************************************************************************/
 

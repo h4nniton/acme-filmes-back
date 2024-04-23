@@ -2,28 +2,49 @@ var generos = {
     "generos": [
         {
             "id": 1,
-            "nome": "Livre"
+            "nome": "Ação"
         },
         {
             "id": 2,
-            "nome": "10 anos"
+            "nome": "Aventura"
         },
         {
             "id": 3,
-            "nome": "12 anos"
+            "nome": "Comédia"
         },
         {
             "id": 4,
-            "nome": "14 anos"
+            "nome": "Documentário"
         },
         {
             "id": 5,
-            "nome": "16 anos"
+            "nome": "Drama"
         },
         {
             "id": 6,
-            "nome": "18 anos"
+            "nome": "Fantasia"
         },
+        {
+            "id": 7,
+            "nome": "Ficção"
+        },
+        {
+            "id": 8,
+            "nome": "Mistério"
+        },
+        {
+            "id": 9,
+            "nome": "Romance"
+        },
+        {
+            "id": 10,
+            "nome": "Suspense"
+        },
+        {
+            "id": 11,
+            "nome": "Terror"
+        }
+
     ]
 }
 

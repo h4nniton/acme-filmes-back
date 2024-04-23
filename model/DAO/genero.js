@@ -13,4 +13,12 @@ const prisma = new PrismaClient();
 
 const insertGenero = async function(dadosGenero){
 
+    let sql;
+
+    try {
+
+        sql = `insert into tbl_genero (nome) values`
+
+    }
+
 }
