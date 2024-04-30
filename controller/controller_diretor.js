@@ -14,3 +14,4 @@ const prisma = new PrismaClient();
 
 // import do arquivo de configuração do projeto
 const message = require('../modulo/config.js')
+
