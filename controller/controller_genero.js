@@ -10,9 +10,9 @@
 const message = require('../modulo/config.js')
 
 //import do arquivo responsável pela interação com o banco de dados
-const filmesDAO = require('../model/DAO/genero.js');
+const generoDAO = require('../model/DAO/genero.js');
 
-//função para inserir um novo filme
+//função para inserir um novo genero
 const setInserirNovoGenero = async function (dadosGenero, contentType) {
 
     try{
@@ -21,56 +21,35 @@ const setInserirNovoGenero = async function (dadosGenero, contentType) {
     if (String(contentType).toLowerCase() == 'application/json'){
 
     //cria o objeto JSON paa devolver os dados  criados na requisição
-    let novoGeneroJSON = {};
+    let generoAtualizadoJSON = {};
 
     //validação de campos obrigatórios ou com digitação inválida
-    if (dadosGenero.nome == '' || dadosGenero.nome == undefined || dadosGenero.nome == null || dadosGenero.nome.length > 80 
+    if (dadosGenero.nome == '' || dadosGenero.nome == undefined || dadosGenero.nome == null || dadosGenero.nome.length > 80
     ) {
 
         return message.ERROR_REQUIRED_FIELDS //400
 
     } else {
 
-        let validateStatus
-
-        //validação da data de relancamento, ja qe ela não é obrigatória no BD
-        if (dadosFilme.data_relacamento != null &&
-            dadosFilme.data_relacamento != '' &&
-            dadosFilme.data_relacamento != undefined) {
-
-            //validação para ver se a data está com a qtde de digitoss correta
-            if (dadosFilme.data_relacamento.length != 10) {
-                return message.ERROR_REQUIRED_FIELDS //400
-            } else {
-                validateStatus = true
-            }
-        } else {
-            validateStatus = true
-        }
-
-        //validaçao para verificar se a variável booleana é verdadeira
-        if (validateStatus) {
-
-            //encaminha os dados do filme para o DAO inserir no banco de dados
-            let novoFilme = await filmesDAO.insertFilme(dadosFilme)
-            let idNovoFilme = await filmesDAO.selectLastInsertId()
+            //encaminha os dados do genero para o DAO inserir no banco de dados
+            let novoGenero = await generoDAO.insertFilme(dadosGenero)
+            let idNovoGenero = await generoDAO.selectLastInsertId()
 
             //validação para verificar se o DAO inseriu os dados do BD
-            if (novoFilme) {
+            if (novoGenero) {
 
                 //Cria o JSON de retorno dos dados (201)
-                novoFilmeJSON.filme = dadosFilme
-                novoFilmeJSON.filme.id = Number(idNovoFilme)
-                novoFilmeJSON.status = message.SUCCESS_CREATED_ITEM.status
-                novoFilmeJSON.status_code = message.SUCCESS_CREATED_ITEM.status_code
-                novoFilmeJSON.message = message.SUCCESS_CREATED_ITEM
+                generoAtualizadoJSON.filme = dadosGenero
+                generoAtualizado.filme.id = Number(idNovoGenero)
+                generoAtualizado.status = message.SUCCESS_CREATED_ITEM.status
+                generoAtualizado.status_code = message.SUCCESS_CREATED_ITEM.status_code
+                generoAtualizado.message = message.SUCCESS_CREATED_ITEM
 
-                return novoFilmeJSON //201
+                return generoAtualizadoJSON //201
             } else {
                 return message.ERROR_INTERNAL_SERVER_DB //500
             }
         }
-    }
 }else{
     return message.ERROR_CONTENT_TYPE //415
 }
@@ -80,109 +59,114 @@ const setInserirNovoGenero = async function (dadosGenero, contentType) {
     
 }
 
-//função para atualizar um filme
-const setAtualizarFilme = async function (dadosAtualizados, id) {
+//função para atualizar um genero
+const setAtualizarGenero = async function (idGenero, dadosGenero, contentType) {
 
     try {
-        if(id == '' || id == undefined || isNaN(id)){
-            return message.ERROR_INVALID_ID //400
-        }else{
-            if(dadosAtualizados == '' || dadosAtualizados == undefined ||
-               dadosAtualizados.nome == '' || dadosAtualizados.nome == undefined || dadosAtualizados.nome == null || dadosAtualizados.nome.length > 80 ||
-               dadosAtualizados.sinopse == '' || dadosAtualizados.sinopse == undefined || dadosAtualizados.sinopse == null || dadosAtualizados.sinopse.length > 65000 ||
-               dadosAtualizados.duracao == '' || dadosAtualizados.duracao == undefined || dadosAtualizados.duracao == null || dadosAtualizados.duracao.length > 8 ||
-               dadosAtualizados.data_lancamento == '' || dadosAtualizados.data_lancamento == undefined || dadosAtualizados.data_lancamento == null || dadosAtualizados.data_lancamento.length != 10 ||
-               dadosAtualizados.foto_capa == '' || dadosAtualizados.foto_capa == undefined || dadosAtualizados.foto_capa == null || dadosAtualizados.foto_capa.length > 200 ||
-               dadosAtualizados.valor_unitario.length > 6
-            ){
-                return message.ERROR_REQUIRED_FIELDS 
-            }else{
-                let dadosAtualizado = await filmesDAO.updateFilme(id, dadosAtualizados)
+        if(String(contentType).toLowerCase() == 'application/json'){
+            
+            let generoAtualizadoJSON = {};
 
-                if(dadosAtualizado){
-                    return message.SUCCESS_UPDATED_ITEM //201
-            }else{
-                return message.ERROR_INTERNAL_SERVER_DB //500
+            if (idGenero == "" || idGenero == undefined || idGenero(isNaN)) {
+
+                return message.ERROR_INVALID_ID
+
+            } else {
+
+                let generoAtualizado = await generoDAO.updateGenero(idGenero, dadosGenero)
+
+                if (generoAtualizado) {
+                    generoAtualizadoJSON.genero = dadosGenero
+                    generoAtualizadoJSON.genero.id = idGenero
+                    generoAtualizadoJSON.status = message.SUCCESS_UPDATED_ITEM.status
+                    generoAtualizadoJSON.status_code = message.SUCCESS_UPDATED_ITEM.status_code
+                    generoAtualizadoJSON.message = message.SUCCESS_UPDATED_ITEM.message
+
+                    return generoAtualizadoJSON
+                } else {
+                    message.ERROR_INTERNAL_SERVER_DB
+                }
             }
+        } else {
+            return message.ERROR_CONTENT_TYPE
         }
 
-}
- } catch (error) {
-    return message.ERROR_INTERNAL_SERVER
-}
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER
+    }
 }
 
-
-//função para excluir um filme
-const setExcluirFilme = async function (id) {
+//função para excluir um genero
+const setExcluirGenero = async function (idGenero) {
 
     try {
         //validação do id
-        if(id == '' || id == undefined || isNaN(id)){
+        if(idGenero == '' || idGenero == undefined || isNaN(idGenero)){
             return message.ERROR_INVALID_ID //400
         }else{
-            let filmeDeletado = await filmesDAO.deleteFilme(id)
+            let generoDeletado = await generoDAO.deleteGenero(idGenero)
 
-            if(filmeDeletado){
+            if(generoDeletado){
                 return message.SUCCESS_DELETED_ITEM //201
             }else{
                 return false
             }
         }
+
     } catch (error) {
         return message.ERROR_INTERNAL_SERVER //500
     }
 }
 
-//função para listar todos os filmes
-const getListarFilmes = async function () {
+//função para listar todos os gêneros
+const getListarGeneros = async function () {
 
     //cria um objeto JSON
-    let filmesJSON = {};
+    let generosJSON = {};
 
-    //chama a função do DAO que retorna os filmes do BD
-    let dadosFilmes = await filmesDAO.selectAllFilmes() //-> pede pro filmesDAO trazer todos os filmes do banco
+    //chama a função do DAO que retorna os generos do BD
+    let dadosGenero = await generoDAO.selectAllFilmes() //-> pede pro generoDAO trazer todos os generos do banco
 
     //validação para verificar se o DAO retonou dados
-    if (dadosFilmes) {
+    if (dadosGenero) {
         //criar o JSON para desenvolver o APP
         
-        filmesJSON.filmes = dadosFilmes;
-        filmesJSON.quantidade = dadosFilmes.length;
-        filmesJSON.status_code = 200
+        generosJSON.generos = dadosGenero;
+        generosJSON.quantidade = dadosGenero.length;
+        generossJSON.status_code = 200
 
-        return filmesJSON
+        return generosJSON
     } else {
         return false
     }
 }
 
-//função para buscar um filme pelo id 
-const getBuscarFilme = async function (id) {
+//função para buscar um genero pelo id 
+const getBuscarGenero = async function (idGenero) {
 
-    //recebe o id do filme 
-    let idFilme = id;
+    //recebe o id do genero
+    let idGenero = id;
 
     //cria o objeto JSON
-    let filmeJSON = {};
+    let generoJSON = {};
 
     //validação para verificar se o id é válido (vazio, inefiido e não numérico)
-    if (idFilme == '' || idFilme == undefined || isNaN(idFilme)) {
+    if (idGenero == '' || idGenero == undefined || isNaN(idGenero)) {
         return message.ERROR_INVALID_ID //400
     } else {
 
         //encaminha para o DAO localizar o id do filme
-        let dadosFilme = await filmesDAO.selectByIdFilme(idFilme)
+        let dadosGenero = await generoDAO.selectByIdGenero(idGenero)
 
         //validação para verificar se existe dados de retorno
-        if (dadosFilme) {
+        if (dadosGenero) {
 
             //validação para verificar a quantidade de itens encontrado
-            if (dadosFilme.length > 0) {
+            if (dadosGenero.length > 0) {
                 //cria o JSON de return
-                filmeJSON.filme = dadosFilme;
-                filmeJSON.status_code = 200
-                return filmeJSON
+                generoJSON.genero = dadosGenero;
+                gerenoJSON.status_code = 200
+                return generoJSON
             } else {
                 return message.ERROR_NOT_FOUND //404
             }
@@ -191,57 +175,12 @@ const getBuscarFilme = async function (id) {
             return message.ERROR_INTERNAL_SERVER_DB //500
         }
     }
-
 }
-
-//função para buscar um filme pelo nome ?
-const getBuscarFilmeNome = async function (nome) {
-
-    //recebe o id do filme 
-    let nomeFilme = nome;
-
-    //cria o objeto JSON
-    let filmeJSON = {};
-
-    //validação para verificar se o id é válido (vazio, inefiido e não numérico)
-    if (nomeFilme == '' || nomeFilme == undefined) {
-        return message.ERROR_INVALID_ID //400
-    } else {
-
-        //encaminha para o DAO localizar o id do filme
-        let dadosFilme = await filmesDAO.selectByNomeFilme(nomeFilme)
- 
-        //validação para verificar se existe dados de retorno
-        if (dadosFilme) {
-
-            //validação para verificar a quantidade de itens encontrado
-            if (dadosFilme.length > 0) {
-                //cria o JSON de return
-                filmeJSON.filme = dadosFilme;
-                filmeJSON.status_code = 200
-                return filmeJSON
-            } else {
-                console.log(dadosFilme)
-                return message.ERROR_NOT_FOUND //404
-            }
-
-        } else {
-            console.log(dadosFilme)
-            return message.ERROR_INTERNAL_SERVER_DB //500
-        }
-    }
-
-}
-
-
-
-
 
 module.exports = {
-    setInserirNovoFilme,
-    setAtualizarFilme,
-    setExcluirFilme,
-    getListarFilmes,
-    getBuscarFilme,
-    getBuscarFilmeNome,
+    setInserirNovoGenero,
+    setAtualizarGenero,
+    setExcluirGenero,
+    getListarGeneros,
+    getBuscarGenero
 }
